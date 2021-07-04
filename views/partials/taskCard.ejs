@@ -1,0 +1,24 @@
+<% for(let task of tasks[index]){ %>
+    <div class="<%= task._id %> task-card card p-2 pt-5 border border-2 border-info">
+        <button class="edit-icon">Edit</button>
+        <div class="move-icon"></div>
+        <p class="task-title click-to-edit border-bottom border-secondary w-50"><b>
+                <%= task.title %>
+            </b></p>
+        <p class="task-details click-to-edit">
+            <%= task.details %>
+        </p>
+
+        <div class="edit-form">
+            <form action="/taskmanager/<%= task._id %>?_method=PATCH" method="POST">
+                <input type="text" name="title" class="form-control mb-1" id="title" placeholder="Title"
+                    value="<%= task.title %>">
+                <textarea name="details" id="details" cols="30" rows="5" placeholder="Details"
+                    class="form-control mb-1"><%= task.details %></textarea>
+                <button id="edit-form-submit-btn">Done</button>
+            </form>
+        </div>
+        <div id="drag-info">Drag</div>
+    </div>
+
+    <% } %>

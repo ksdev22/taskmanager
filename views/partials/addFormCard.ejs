@@ -1,0 +1,12 @@
+<div id="new-task-button-container" class="mb-3 w-100">
+    <button id="new-task-button" class="btn btn-success w-100">Add Task</button>
+</div>
+
+<div id="new-task-form-container">
+    <form action="/taskmanager" method="POST" class="text-center">
+        <input type="text" name="title" id="title" placeholder="Title" class="form-control mb-1">
+        <textarea name="details" id="details" rows="5" placeholder="Details" class="form-control mb-1"></textarea>
+        <button type="submit" class="btn btn-success w-25">Add</button>
+        <button id="cancel-new-task" class="btn btn-danger w-25">Cancel</button>
+    </form>
+</div>

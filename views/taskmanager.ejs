@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Teko:wght@300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Otomanopee+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2&display=swap" rel="stylesheet">
+
+    <style>
+        html {
+            overflow-y: scroll;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Baloo 2';
+            font-size: 1.1rem;
+        }
+
+        .main {
+            display: flex;
+            justify-content: space-evenly;
+            background-color: #CDF0EA;
+        }
+
+        .drop-zone {
+            padding-top: 4rem;
+            padding-bottom: 4rem;
+            width: 32%;
+            height: max-content;
+            background-color: #C490E4;
+        }
+
+        .task-card {
+            word-wrap: break-word;
+            position: relative;
+            margin-bottom: 1rem;
+            border-radius: 15px;
+            background-color: #f5d1d1;
+            transition: transform 0.5s, box-shadow 0.5s;
+        }
+
+        .task-card:hover {
+            transform: translate(2px, 2px);
+            box-shadow: -2px -2px 5px black;
+
+        }
+
+        #new-task-form-container {
+            background-color: #ecb6e3;
+            border-radius: 15px;
+            height: 0px;
+            transition: height 0.5s;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+        }
+
+        #new-task-form-container form {
+            margin: auto auto;
+            width: 100%;
+        }
+
+        .expand {
+            height: 300px !important;
+        }
+
+        .edit-form {
+            height: 0px;
+            transition: height 0.5s;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+        }
+
+
+        .edit-form form {
+            margin: auto auto;
+            width: 100%;
+        }
+
+        .edit-icon {
+            position: absolute;
+            top: 5px;
+            right: 60px;
+            background-color: #ffca2c;
+            border: none;
+            border-radius: 5px;
+            padding: 0;
+            width: 60px;
+            height: 40px;
+        }
+
+        .edit-icon:hover {
+            background-color: #ffd558;
+        }
+
+        #edit-form-submit-btn {
+            display: none;
+            position: absolute;
+            top: 5px;
+            right: 125px;
+            background-color: #34ac74;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 0;
+            width: 60px;
+            height: 40px;
+        }
+
+        #edit-form-submit-btn:hover {
+            background-color: #359166;
+        }
+
+        .move-icon {
+            cursor: move;
+            /* fallback if grab cursor is unsupported */
+            cursor: grab;
+            cursor: -moz-grab;
+            cursor: -webkit-grab;
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            height: 40px;
+            width: 40px;
+            background-color: tomato;
+            border-radius: 50%;
+        }
+
+        /* (Optional) Apply a "closed-hand" cursor during drag operation. */
+        .move-icon:active {
+            cursor: grabbing;
+            cursor: -moz-grabbing;
+            cursor: -webkit-grabbing;
+        }
+
+        .invisible {
+            display: none;
+        }
+
+        #delete-icon {
+            display: none;
+            position: fixed;
+            bottom: 0px;
+            left: 0px;
+            width: 100%;
+            background: coral;
+            height: 10vh;
+            z-index: 999;
+            color: white;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+        }
+
+        input {
+            border-radius: 15px !important;
+        }
+
+        textarea {
+            border-radius: 15px !important;
+        }
+
+        #headings {
+            background-color: rgb(46, 165, 153);
+            padding-top: 7px;
+        }
+
+        .drop-zone-hover {
+            background-color: #a252d4;
+        }
+
+        .delete-hover {
+            background-color: rgb(255, 93, 35) !important;
+        }
+
+        #drag-info {
+            display: none;
+            position: absolute;
+            top: 48px;
+            right: 6px;
+            font-size: 0.8rem;
+            text-align: center;
+            width: 50px;
+            background-color: white;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <%- include('partials/header.ejs') %>
+        <div class="container">
+            <div class="main border border-primary rounded">
+                <div class="drop-zone border border-2 border-success rounded my-3 px-2" id="new">
+                    <%- include("partials/addFormCard.ejs") %>
+                        <%- include("partials/taskCard.ejs") %>
+                </div>
+                <div class="drop-zone border border-2 border-success rounded my-3 px-2" id="in-progress">
+                    <% index=index + 1 %>
+                        <%- include("partials/taskCard.ejs") %>
+                </div>
+                <div class="drop-zone border border-2 border-success rounded my-3 px-2" id="done">
+                    <% index=index + 1 %>
+                        <%- include("partials/taskCard.ejs") %>
+                </div>
+            </div>
+        </div>
+        <div id="delete-icon">DELETE</div>
+        <script src="/static/scripts/addFormScript.js"></script>
+        <script src="/static/scripts/dragAndDrop.js"></script>
+        <script src="/static/scripts/edit.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+</body>
+
+</html>
