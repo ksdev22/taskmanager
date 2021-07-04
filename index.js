@@ -5,14 +5,11 @@ const methodOverride = require("method-override");
 const path = require("path");
 
 mongoose
-  .connect(
-    "mongodb+srv://ksdev:BUSL5cLt09VFaU34@cluster0.2uid1.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      useFindAndModify: false,
-    }
-  )
+  .connect("", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+  })
   .then((data) => {
     console.log("database connected");
   })
