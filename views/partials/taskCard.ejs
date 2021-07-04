@@ -12,9 +12,9 @@
         <div class="edit-form">
             <form action="/taskmanager/<%= task._id %>?_method=PATCH" method="POST">
                 <input type="text" name="title" class="form-control mb-1" id="title" placeholder="Title"
-                    value="<%= task.title %>">
-                <textarea name="details" id="details" cols="30" rows="5" placeholder="Details"
-                    class="form-control mb-1"><%= task.details %></textarea>
+                    value="<%= task.title %>" required>
+                <textarea name="details" id="details" cols="30" rows="5" placeholder="Details" class="form-control mb-1"
+                    required><%= task.details %></textarea>
                 <button id="edit-form-submit-btn">Done</button>
             </form>
         </div>

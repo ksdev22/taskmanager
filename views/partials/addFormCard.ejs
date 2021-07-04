@@ -4,8 +4,9 @@
 
 <div id="new-task-form-container">
     <form action="/taskmanager" method="POST" class="text-center">
-        <input type="text" name="title" id="title" placeholder="Title" class="form-control mb-1">
-        <textarea name="details" id="details" rows="5" placeholder="Details" class="form-control mb-1"></textarea>
+        <input type="text" name="title" id="title" placeholder="Title" class="form-control mb-1" required>
+        <textarea name="details" id="details" rows="5" placeholder="Details" class="form-control mb-1"
+            required></textarea>
         <button type="submit" class="btn btn-success w-25">Add</button>
         <button id="cancel-new-task" class="btn btn-danger w-25">Cancel</button>
     </form>
