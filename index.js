@@ -85,7 +85,7 @@ app.delete("/taskmanager", (req, res) => {
 let port = process.env.PORT || 80;
 const resetDbAndStart = async () => {
   try {
-    const msg = await Task.deleteMany({});
+    // const msg = await Task.deleteMany({});
     app.listen(port, () => {
       console.log(`server started on port ${port}....`);
     });
