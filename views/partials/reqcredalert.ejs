@@ -1,0 +1,24 @@
+<% if(success.length> 0){ %>
+    <div class="alert alert-success alert-dismissible fade show fixed-top w-50" role="alert"
+        style="top: 50px; left : 400px">
+        <%= success %>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <% } %>
+
+        <% if(error.length> 0){ %>
+            <div class="alert alert-danger alert-dismissible fade show  fixed-top w-50" role="alert"
+                style="top: 50px; left : 400px">
+                <%= error %>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <% } %>
+
+                <script>
+                    const alerts = document.querySelectorAll(".alert");
+                    setTimeout(() => {
+                        for (let alert of alerts) {
+                            alert.remove();
+                        }
+                    }, 2000);
+                </script>

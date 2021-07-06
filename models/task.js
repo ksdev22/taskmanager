@@ -7,6 +7,9 @@ const taskSchema = new mongoose.Schema({
   },
   title: String,
   details: String,
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+  },
 });
 
 module.exports = mongoose.model("Task", taskSchema);

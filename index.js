@@ -1,11 +1,15 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const Task = require("./models/task.js");
+const User = require("./models/user.js");
 const methodOverride = require("method-override");
 const path = require("path");
+const bcrypt = require("bcrypt");
+const session = require("express-session");
+const flash = require("connect-flash");
 
 mongoose
-  .connect("", {
+  .connect("mongodb://localhost:27017/taskManager", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
@@ -21,6 +25,23 @@ const app = express();
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
+app.use(
+  session({
+    secret: "not a good secret",
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24,
+    },
+    resave: false,
+    saveUninitialized: true,
+  })
+);
+
+app.use(flash());
+app.use((req, res, next) => {
+  res.locals.success = req.flash("success");
+  res.locals.error = req.flash("error");
+  next();
+});
 app.use(methodOverride("_method"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -30,10 +51,66 @@ app.use((req, res, next) => {
   next();
 });
 
+app.get("/requirecredentials", (req, res) => {
+  res.render("reqcred.ejs");
+});
+
+app.post("/register", async (req, res) => {
+  const { username, password } = req.body;
+  const existingUser = await User.find({ username });
+  console.log(existingUser);
+  if (existingUser.length > 0) {
+    req.flash("error", "username already exists");
+    return res.redirect("/requirecredentials");
+  } else {
+    const hashedPw = await bcrypt.hash(password, 12);
+    const newUser = new User({ username, password: hashedPw });
+    console.log(newUser);
+    await newUser.save();
+    req.flash("success", "registered successfuly, login to continue");
+    return res.redirect("/requirecredentials");
+  }
+});
+app.post("/login", async (req, res) => {
+  const { username, password } = req.body;
+  const foundUser = await User.findOne({ username });
+  if (foundUser) {
+    const isPasswordCorrect = await bcrypt.compare(
+      password,
+      foundUser.password
+    );
+    if (isPasswordCorrect) {
+      req.flash("success", "successfuly logged in");
+      req.session.user = foundUser._id;
+      return res.redirect("/taskmanager");
+    } else {
+      req.flash("error", "invalid credentials");
+      return res.redirect("/requirecredentials");
+    }
+  } else {
+    req.flash("error", "invalid credentials");
+    return res.redirect("/requirecredentials");
+  }
+});
+app.post("/logout", (req, res) => {
+  // req.session.destroy();
+  req.session.user = null;
+  req.flash("success", "succesfuly logged out");
+  res.redirect("/requirecredentials");
+});
+app.use((req, res, next) => {
+  if (req.session.user) {
+    return next();
+  } else {
+    return res.redirect("/requirecredentials");
+  }
+});
+
 app.get("/taskmanager", async (req, res) => {
-  const newTasks = await Task.find({ status: "new" });
-  const inProgressTasks = await Task.find({ status: "in-progress" });
-  const doneTasks = await Task.find({ status: "done" });
+  const user = req.session.user;
+  const newTasks = await Task.find({ status: "new", user });
+  const inProgressTasks = await Task.find({ status: "in-progress", user });
+  const doneTasks = await Task.find({ status: "done", user });
   const tasks = [newTasks, inProgressTasks, doneTasks];
   res.render("taskmanager.ejs", { tasks, index: 0 });
 });
@@ -43,11 +120,12 @@ app.post("/taskmanager", (req, res) => {
     status: "new",
     title: req.body.title,
     details: req.body.details,
+    user: req.session.user,
   });
   newTask
     .save()
     .then((data) => {
-      //   console.log(data);
+      console.log(data);
       res.redirect("/taskmanager");
     })
     .catch((err) => {
@@ -64,7 +142,6 @@ app.patch("/taskmanager", (req, res) => {
       .catch((err) => {
         console.log("error while updating drag operation");
       });
-  } else {
   }
 });
 app.patch("/taskmanager/:id", async (req, res) => {
