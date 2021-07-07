@@ -60,14 +60,14 @@ app.post("/register", async (req, res) => {
   const existingUser = await User.find({ username });
   console.log(existingUser);
   if (existingUser.length > 0) {
-    req.flash("error", "username already exists");
+    req.flash("error", "Username already exists");
     return res.redirect("/requirecredentials");
   } else {
     const hashedPw = await bcrypt.hash(password, 12);
     const newUser = new User({ username, password: hashedPw });
     console.log(newUser);
     await newUser.save();
-    req.flash("success", "registered successfuly, login to continue");
+    req.flash("success", "Registered successfuly, Login to continue");
     return res.redirect("/requirecredentials");
   }
 });
@@ -80,22 +80,22 @@ app.post("/login", async (req, res) => {
       foundUser.password
     );
     if (isPasswordCorrect) {
-      req.flash("success", "successfuly logged in");
+      req.flash("success", "Successfuly logged in");
       req.session.user = foundUser._id;
       return res.redirect("/taskmanager");
     } else {
-      req.flash("error", "invalid credentials");
+      req.flash("error", "Invalid credentials");
       return res.redirect("/requirecredentials");
     }
   } else {
-    req.flash("error", "invalid credentials");
+    req.flash("error", "Invalid credentials");
     return res.redirect("/requirecredentials");
   }
 });
 app.post("/logout", (req, res) => {
   // req.session.destroy();
   req.session.user = null;
-  req.flash("success", "succesfuly logged out");
+  req.flash("success", "Succesfuly logged out");
   res.redirect("/requirecredentials");
 });
 app.use((req, res, next) => {
@@ -108,11 +108,12 @@ app.use((req, res, next) => {
 
 app.get("/taskmanager", async (req, res) => {
   const user = req.session.user;
+  const username = await User.findById(user);
   const newTasks = await Task.find({ status: "new", user });
   const inProgressTasks = await Task.find({ status: "in-progress", user });
   const doneTasks = await Task.find({ status: "done", user });
   const tasks = [newTasks, inProgressTasks, doneTasks];
-  res.render("taskmanager.ejs", { tasks, index: 0 });
+  res.render("taskmanager.ejs", { tasks, index: 0, username });
 });
 
 app.post("/taskmanager", (req, res) => {

@@ -1,11 +1,13 @@
 <% if(success.length> 0){ %>
-    <div class="alert alert-success alert-dismissible fade show fixed-top w-50 mx-auto mt-3" role="alert">
+    <div style="z-index: 5;" class="alert alert-success alert-dismissible fade show fixed-top w-50 mx-auto mt-5"
+        role="alert">
         <%= success %>
     </div>
     <% } %>
 
         <% if(error.length> 0){ %>
-            <div class="alert alert-danger alert-dismissible fade show  fixed-top w-50 mx-auto mt-3" role="alert">
+            <div style="z-index: 5;" class="alert alert-danger alert-dismissible fade show  fixed-top w-50 mx-auto mt-5"
+                role="alert">
                 <%= error %>
             </div>
             <% } %>
@@ -16,5 +18,5 @@
                         for (let alert of alerts) {
                             alert.remove();
                         }
-                    }, 2000);
+                    }, 5000);
                 </script>
