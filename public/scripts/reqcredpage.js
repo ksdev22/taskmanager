@@ -22,6 +22,9 @@ registerBtn.addEventListener("click", () => {
   registerBtn.remove();
   formContainer.classList.add("form-expand");
 
+  form.children[1].children[0].innerHTML += `<span class="text-muted"> (min. 8
+    characters)</span>`;
+
   const formRegisterBtn = document.createElement("button");
   formRegisterBtn.disabled = true;
   formRegisterBtn.type = "submit";
