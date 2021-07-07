@@ -201,6 +201,12 @@
 
 <body>
     <%- include('partials/header.ejs') %>
+
+        <div id="headings" class="d-flex justify-content-around sticky-top text-light container">
+            <h3>New</h3>
+            <h3>In-Progress</h3>
+            <h3>Done</h3>
+        </div>
         <div class="d-flex flex-row-reverse fixed-top" style="top: 50px;">
             <form action="/logout" method="POST" class="d-inline-block me-5" style="width: max-content;">
                 <button class="btn btn-danger">Logout</button>
