@@ -18,6 +18,7 @@
 
     <style>
         html {
+            position: relative;
             overflow-y: scroll;
         }
 
@@ -27,10 +28,25 @@
             font-size: 1.1rem;
         }
 
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            background-image: url("/static/images/bg4.jpg");
+            background-size: cover;
+            background-position: center;
+            width: 100%;
+            min-height: 100vh;
+            z-index: -2;
+            opacity: 0.4;
+        }
+
         .main {
             display: flex;
             justify-content: space-evenly;
-            background-color: #CDF0EA;
+            /* background-color: #CDF0EA; */
+            border: none !important;
         }
 
         .drop-zone {
@@ -38,7 +54,21 @@
             padding-bottom: 4rem;
             width: 32%;
             height: max-content;
+            position: relative;
+            border-radius: 15px;
+        }
+
+        .drop-zone::before {
+            content: "";
             background-color: #C490E4;
+            position: absolute;
+            border-radius: 15px;
+            top: 0px;
+            left: 0px;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.5;
         }
 
         .task-card {
@@ -202,7 +232,7 @@
 <body>
     <%- include('partials/header.ejs') %>
 
-        <div id="headings" class="d-flex justify-content-around sticky-top text-light container">
+        <div id="headings" class="mt-3 rounded container d-flex justify-content-around sticky-top text-light">
             <h3>New</h3>
             <h3>In-Progress</h3>
             <h3>Done</h3>
@@ -212,17 +242,17 @@
                 <button class="btn btn-danger">Logout</button>
             </form>
         </div>
-        <div class="container">
-            <div class="main border border-primary rounded">
-                <div class="drop-zone border border-2 border-success rounded my-3 px-2" id="new">
+        <div class="container px-0 mt-1">
+            <div class="main">
+                <div class="drop-zone my-3 px-2" id="new">
                     <%- include("partials/addFormCard.ejs") %>
                         <%- include("partials/taskCard.ejs") %>
                 </div>
-                <div class="drop-zone border border-2 border-success rounded my-3 px-2" id="in-progress">
+                <div class="drop-zone my-3 px-2" id="in-progress">
                     <% index=index + 1 %>
                         <%- include("partials/taskCard.ejs") %>
                 </div>
-                <div class="drop-zone border border-2 border-success rounded my-3 px-2" id="done">
+                <div class="drop-zone my-3 px-2" id="done">
                     <% index=index + 1 %>
                         <%- include("partials/taskCard.ejs") %>
                 </div>

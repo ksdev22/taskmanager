@@ -17,8 +17,27 @@
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2&display=swap" rel="stylesheet">
 
     <style>
+        html {
+            position: relative;
+            overflow-y: scroll;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            background-image: url("/static/images/bg1.jpg");
+            background-position: center;
+            background-size: cover;
+            width: 100%;
+            min-height: 100vh;
+            z-index: -1;
+            opacity: 0.25;
+        }
+
         .form-expand {
-            height: 300px !important;
+            height: 325px !important;
         }
 
         .form-container {
@@ -50,7 +69,7 @@
             <h2 class="live-type"></h2>
             <h4 class="live-type"></h4>
 
-            <div class="row mt-5">
+            <div class="row mt-1">
                 <div class="col-3 offset-3 text-center">
                     <button id="login-btn" class="btn btn-success w-50">Login</button>
                 </div>
@@ -60,15 +79,15 @@
             </div>
         </div>
 
-        <div class="row mt-5 form-container">
+        <div class="row mt-1 form-container">
             <div class="col-6 offset-3">
                 <form action="" method="POST" id="login-register-form">
                     <div class="mb-3">
-                        <label for="username" class="form-label">Username</label>
+                        <label for="username" class="form-label"><b>Username</b></label>
                         <input type="text" name="username" id="username" class="form-control" required>
                     </div>
                     <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
+                        <label for="password" class="form-label"><b>Password</b></label>
                         <input type="password" name="password" id="password" class="form-control" required>
                     </div>
                     <div class="my-4 d-flex">

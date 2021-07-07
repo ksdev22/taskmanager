@@ -22,8 +22,8 @@ registerBtn.addEventListener("click", () => {
   registerBtn.remove();
   formContainer.classList.add("form-expand");
 
-  form.children[1].children[0].innerHTML += `<span class="text-muted"> (min. 8
-    characters)</span>`;
+  form.children[1].children[0].innerHTML += `<span class="text-muted"><b> (min. 8
+    characters)</b></span>`;
 
   const formRegisterBtn = document.createElement("button");
   formRegisterBtn.disabled = true;
@@ -35,7 +35,7 @@ registerBtn.addEventListener("click", () => {
   const rePasswordLabel = document.createElement("label");
   rePasswordLabel.htmlFor = "re-password";
   rePassword.type = "password";
-  rePasswordLabel.textContent = "Re-enter Password";
+  rePasswordLabel.innerHTML = "<b>Re-enter Password</b>";
   rePasswordLabel.className = "form-label";
   rePassword.className = "form-control";
   rePassword.id = "re-password";
